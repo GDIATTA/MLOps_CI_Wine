@@ -9,3 +9,9 @@ jobs:
         - run: |
             pip install -r requirements.txt
             python train.py  # generate plot.png
+            # Create CML report
+            cat metrics.txt >> report.md
+            echo '![](./feature_importance.png "feature")' >> report.md
+            cml comment create report.md
+          env:
+            REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
