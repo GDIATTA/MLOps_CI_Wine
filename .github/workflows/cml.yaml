@@ -1,0 +1,30 @@
+name: model-training franswap
+on:
+  push:
+    branches:
+      - main
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v4
+        with:
+          python-version: '3.x'
+      - uses: actions/setup-node@v3
+        with:
+          node-version: '16'
+      - uses: iterative/setup-cml@v1
+      - name: Train model
+        env:
+          REPO_TOKEN: ${{ secrets.API_KEY }}
+        run: |
+          pip install -r requirements.txt
+          pip install --upgrade pip
+          python train.py
+          npm install -g @dvcorg/cml
+          echo "## Model metrics" > report.md
+          cat metrics.txt >> report.md
+          echo '![](./feature_importance.png "feature")' >> report.md
+          echo '![](./residuals.png "feature")' >> report.md
+          cml comment create report.md
