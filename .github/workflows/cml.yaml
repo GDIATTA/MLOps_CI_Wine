@@ -16,7 +16,7 @@ jobs:
       - uses: iterative/setup-cml@v1
       - name: Train model
         env:
-          REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          REPO_TOKEN: ${{ secrets.API_KEY }}
         run: |
           pip install -r requirements.txt
           pip install --upgrade pip
