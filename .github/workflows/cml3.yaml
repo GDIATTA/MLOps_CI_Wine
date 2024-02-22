@@ -1,0 +1,27 @@
+name: cml2
+on: [push]
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+      - uses: actions/setup-python@v3
+        with:
+         python-version: '3.x'
+      - uses: actions/setup-node@v3
+        with:
+         node-version: '16'
+      - uses: iterative/setup-cml@v1
+      - name: Train model
+        env:
+          REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          pip install -r requirements.txt
+          python train.py
+
+          # Create CML report
+          cat metrics.txt >> report.md
+          echo '![](./feature_importance.png "feature")' >> report.md
+          cml comment create report.md
