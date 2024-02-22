@@ -18,7 +18,7 @@ jobs:
         run: |
           pip install -r requirements.txt
           python train.py
-          npm install -g @dvcorg/cml
+
           # Create CML report
           cat metrics.txt >> report.md
           echo '![](./feature_importance.png "feature")' >> report.md
